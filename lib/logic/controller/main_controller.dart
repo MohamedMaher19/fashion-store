@@ -14,16 +14,16 @@ final tabsScreens = [
   HomeScreen(),
   CategoryScreen(),
   FavoritesScreen(),
-  SettingScreen(),
+  SettingScreen(),].obs;
 
-].obs;
+
 
 final pageTitles = [
   'Moon Store',
   'Categories',
   'Favorites',
-  'Settings',
+  'Settings',].obs;
 
-].obs;
+
 
 }
