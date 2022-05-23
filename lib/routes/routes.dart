@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:moon_store/logic/bindings/auth_binding.dart';
 import 'package:moon_store/logic/bindings/main_binding.dart';
+import 'package:moon_store/logic/bindings/product_binding.dart';
 import 'package:moon_store/view/screens/auth_screens/forget_passwoed_screen.dart';
 import 'package:moon_store/view/screens/auth_screens/login_screen.dart';
 import 'package:moon_store/view/screens/auth_screens/signup_screen.dart';
@@ -33,7 +34,7 @@ class AppRoute {
     ),GetPage(
       name: Routes.mainScreen,
       page: () =>   MainScreen(),
-      bindings: [AuthBinding(), MainBinding()],
+      bindings: [AuthBinding(), MainBinding() , ProductBinding()],
     ),
   ];
 }
