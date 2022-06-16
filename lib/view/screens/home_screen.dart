@@ -1,13 +1,23 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:moon_store/utils/themes.dart';
+import 'package:moon_store/utils/users.dart';
 import 'package:moon_store/view/widgets/card_item.dart';
 import 'package:moon_store/view/widgets/custom_search_bar.dart';
 import 'package:moon_store/view/widgets/text.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
+
+
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -18,7 +28,7 @@ class HomeScreen extends StatelessWidget {
           Container(
             padding: EdgeInsets.only(top: 5),
             width: double.infinity,
-            height: 170,
+            height: 190,
             decoration: BoxDecoration(
                 color: Get.isDarkMode ? pinkClr : mainColor,
                 borderRadius: BorderRadius.only(
@@ -32,7 +42,7 @@ class HomeScreen extends StatelessWidget {
                 children: [
                   TextUtils(
                     fontSize: 25,
-                    text: 'Welcome , ',
+                    text: 'Welcome , '.tr,
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),
@@ -41,7 +51,7 @@ class HomeScreen extends StatelessWidget {
                   ),
                   TextUtils(
                     fontSize: 25,
-                    text: 'Find your pleasure',
+                    text: 'Find your pleasure'.tr,
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),
@@ -59,19 +69,21 @@ class HomeScreen extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(left: 20.0),
             child: Align(
-              alignment: Alignment.topLeft,
+                alignment: Alignment.topLeft,
                 child: TextUtils(
-                    text: 'Categories',
+                    text: 'Categories'.tr,
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                     color: Get.isDarkMode ? Colors.white : Colors.black)),
           ),
-          SizedBox(height: 10,),
+          SizedBox(
+            height: 10,
+          ),
           CustomCardItem(),
-
-
         ],
       ),
     ));
   }
+
+
 }

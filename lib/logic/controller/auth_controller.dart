@@ -10,8 +10,9 @@ import 'package:moon_store/routes/routes.dart';
 class AuthController extends GetxController {
   bool isVisiblity = false;
   bool isCheckedBox = false;
-  var displayUserName = '';
-  var displayUserPhoto = '';
+  var displayUserName = ''.obs;
+  var displayUserPhoto = ''.obs;
+  var displayUserEmail = ''.obs;
   FirebaseAuth auth = FirebaseAuth.instance;
   var googleSignIn =GoogleSignIn();
   FaceBookModel? faceBookModel;
@@ -23,6 +24,22 @@ class AuthController extends GetxController {
   final GetStorage authbox = GetStorage();
 
   ///////////////////////////////////////////////////////
+
+// to solve problem with display userName at settingScreen
+  User ? get userProfileDetails => auth.currentUser;
+
+  @override
+  void onInit(){
+
+    // مشاكل في عرض بيانات المستخدم
+
+    // displayUserName.value = (userProfileDetails != null ? userProfileDetails?.displayName : '')!;
+    // displayUserPhoto.value = (userProfileDetails != null ? userProfileDetails?.photoURL : '')!;
+    // displayUserEmail.value = (userProfileDetails != null ? userProfileDetails?.email : '')!;
+
+
+    super.onInit();
+  }
 
 
 
@@ -54,7 +71,7 @@ class AuthController extends GetxController {
         password: password,
       )
           .then((value) {
-        displayUserName = name;
+        displayUserName.value = name;
         auth.currentUser!.updateDisplayName(name);
       });
 
@@ -110,7 +127,7 @@ class AuthController extends GetxController {
     try {
       await auth
           .signInWithEmailAndPassword(email: email, password: password)
-          .then((value) => displayUserName = auth.currentUser!.displayName!);
+          .then((value) => displayUserName.value = auth.currentUser!.displayName!);
 
       isSignedIn = true;
       authbox.write('auth', isSignedIn ); // to save signIn state with fireBase
@@ -153,10 +170,22 @@ class AuthController extends GetxController {
 
   void googleSignUp()async {
     try {
-      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+      final GoogleSignInAccount ? googleUser = await googleSignIn.signIn();
 
-      displayUserName = googleUser!.displayName!;
-      displayUserPhoto = googleUser.photoUrl!;
+      displayUserName.value = googleUser!.displayName!;
+      displayUserPhoto.value = googleUser.photoUrl!;
+      displayUserEmail.value = googleUser.email;
+
+      // to solve problem with display userName at settingScreen
+
+      GoogleSignInAuthentication googleSignInAuthentication = await googleUser.authentication;
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        idToken: googleSignInAuthentication.idToken,
+        accessToken: googleSignInAuthentication.accessToken,
+      );
+
+      await auth.signInWithCredential(credential); // كدا بيانات الدخول بجوجل اتحفظت ف الفاير بيز واقدر استدعيها ف شاشة ال setting
+
 
       isSignedIn = true;
       authbox.write('auth', isSignedIn ); // to save signIn state with google
@@ -181,7 +210,7 @@ class AuthController extends GetxController {
     }
   }
 
-  ////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////
 
   void faceBookSignUp()async {
 
@@ -212,7 +241,7 @@ class AuthController extends GetxController {
     }
   }
 
-  ////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////
 
   void resetPassword({
     required String email,
@@ -267,10 +296,11 @@ class AuthController extends GetxController {
     try{
       await auth.signOut();  // sign out from firebase
       await googleSignIn.signOut(); // sign out from google
-      await FacebookAuth.i.logOut(); // sign out feom faceBook
+      await FacebookAuth.i.logOut(); // sign out from faceBook
 
-      displayUserName = '';    // make user name & photo empty as he is log out
-      displayUserPhoto = '';   // make user name & photo empty as he is log out
+      displayUserName.value = '';    // make user name & photo empty as he is log out
+      displayUserPhoto.value = '';   // make user name & photo empty as he is log out
+      displayUserEmail.value = '';   // make user name & photo empty as he is log out
 
 
       isSignedIn = false;

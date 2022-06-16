@@ -19,7 +19,7 @@ final tabsScreens = [
 
 
 final pageTitles = [
-  'Moon Store',
+  'Fashion Store',
   'Categories',
   'Favorites',
   'Settings',].obs;
