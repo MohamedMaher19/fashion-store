@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:moon_store/logic/controller/auth_controller.dart';
 import 'package:moon_store/routes/routes.dart';
@@ -134,7 +135,7 @@ class LoginScreen extends StatelessWidget {
                             text: 'Forget Password ?',
                             fontSize:15 ,
                             fontWeight:FontWeight.normal ,
-                            color: Get.isDarkMode ? Colors.black : Colors.white,
+                            color: Get.isDarkMode ? Colors.white : Colors.black,
 
                           )),
                         ),
@@ -168,9 +169,9 @@ class LoginScreen extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             GetBuilder<AuthController>(builder: (controller){
-                              return InkWell(
+                              return GestureDetector(
 
-                                child: Image.asset('assets/images/facebook.png'),
+                                child: Icon(FontAwesomeIcons.facebook , color:Get.isDarkMode ?Colors.white : Colors.black, size: 35,),
                                 onTap: (){
                                   controller.faceBookSignUp();
 
@@ -181,7 +182,8 @@ class LoginScreen extends StatelessWidget {
                             SizedBox(width: 30,),
 
                            GetBuilder<AuthController>(builder: (controller){
-                             return  InkWell(child: Image.asset('assets/images/google.png', ) ,
+                             return  GestureDetector(
+                               child: Icon(FontAwesomeIcons.google,color:Get.isDarkMode ?Colors.white : Colors.black, size: 35,),
 
                                onTap: (){
 

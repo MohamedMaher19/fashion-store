@@ -1,41 +1,33 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:moon_store/logic/controller/product_controller.dart';
 import 'package:moon_store/utils/themes.dart';
-
-class FavoritesScreen extends StatelessWidget {
+import 'package:animate_do/animate_do.dart';
+import 'package:moon_store/view/widgets/empty_fav_widget.dart';
+class FavoritesScreen extends StatefulWidget {
    FavoritesScreen({Key? key}) : super(key: key);
 
+  @override
+  State<FavoritesScreen> createState() => _FavoritesScreenState();
+}
+
+class _FavoritesScreenState extends State<FavoritesScreen> {
    final controller = Get.put(ProductController());
+
+   AnimationController ? animateController;
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: context.theme.backgroundColor,
-      body: Obx(
-            () {
+      body: Obx(() {
           if (controller.favoritesList.isEmpty) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    height: 100,
-                    width: 100,
-                    child: Image.asset("assets/images/heart.png"),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Text('Please, Add your favorites products.',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Get.isDarkMode ? Colors.white : Colors.black,
-                        fontSize: 18,
-                      )),
-                ],
-              ),
-            );
+
+            return EmptyFavorites();
+
           } else {
             return ListView.separated(
               itemBuilder: (context, index) {
@@ -47,10 +39,7 @@ class FavoritesScreen extends StatelessWidget {
                 );
               },
               separatorBuilder: (context, index) {
-                return const Divider(
-                  color: Colors.grey,
-                  thickness: 1,
-                );
+                return Container();
               },
               itemCount: controller.favoritesList.length,
             );
@@ -60,7 +49,6 @@ class FavoritesScreen extends StatelessWidget {
     );
   }
 
-
    Widget favoriteItem({
      required String image,
      required double price,
@@ -69,61 +57,86 @@ class FavoritesScreen extends StatelessWidget {
 }) {
   return Padding(
     padding: const EdgeInsets.all(10.0),
-    child: Container(
-      width: double.infinity,
-      height: 100,
-      child: Row(
-        children: [
-          SizedBox(
-            child: Card(
-              clipBehavior: Clip.antiAlias,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: AspectRatio(
-                aspectRatio: 1,
-                child: Image.network(
-                  image,
-                  fit: BoxFit.cover,
+    child: Card(
+      clipBehavior: Clip.antiAlias,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(13),
+      ),
+      color: Colors.tealAccent.withOpacity(0.4),
+      elevation: 1,
+      child: Container(
+        width: double.infinity,
+        height: 100,
+        child: Row(
+          children: [
+            SizedBox(
+              child: Card(
+                clipBehavior: Clip.antiAlias,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(13),
+                ),
+                child: AspectRatio(
+                  aspectRatio: 1,
+                  child: Image.network(
+                    image,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ),
-          ),
-          const SizedBox(width: 15,),
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(title,
-                  style: TextStyle(
-                    color: Get.isDarkMode ? Colors.white : Colors.black,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    overflow: TextOverflow.ellipsis,
+            const SizedBox(width: 15,),
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(title,
+                    style: TextStyle(
+                      color: Get.isDarkMode ? Colors.white : Colors.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 10,),
-                Text('\$ $price',
-                  style: TextStyle(
-                    color: Get.isDarkMode ? Colors.white : Colors.black,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    overflow: TextOverflow.ellipsis,
+                  const SizedBox(height: 10,),
+                  Text('\$ $price',
+                    style: TextStyle(
+                      color: Get.isDarkMode ? Colors.white : Colors.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
-                ),
-              ],
-            ),
+                ],
+              ),
 
-          ),
-          IconButton(onPressed: () {
-            controller.manageFavorites(productId);
-          },
-              icon: Icon(Icons.favorite, color:Get.isDarkMode ? Colors.red : mainColor , size: 30, ))
-        ],
+            ),
+            IconButton(onPressed: () {
+              AwesomeDialog(
+                context: context,
+                dialogType: DialogType.WARNING,
+                animType: AnimType.BOTTOMSLIDE,
+                title: 'Delete ?',
+                desc: 'are u sure u want to remove this item from favorites ?',
+                btnCancelOnPress: () {
+
+                },
+                btnOkOnPress: () {
+                  controller.manageFavorites(productId);
+
+
+                },
+              )..show();
+
+            },
+                icon: Icon(Icons.favorite, color:Get.isDarkMode ? Colors.red : mainColor , size: 30, ))
+          ],
+        ),
       ),
     ),
   );
 }
+
+
 }
 //

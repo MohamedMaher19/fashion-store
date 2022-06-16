@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -125,10 +126,24 @@ class SignUpScreen extends StatelessWidget {
                               onPressed: () {
 
                                 if(controller.isCheckedBox == false){
-                                  Get.snackbar('Check Box','Please , Accept terms & condition to enjoy our products' ,
-                                  snackPosition: SnackPosition.BOTTOM,
-                                backgroundColor: Colors.green,
-                                colorText: Colors.white );
+                                  AwesomeDialog(
+                                    context: context,
+                                    dialogType: DialogType.WARNING,
+                                    animType: AnimType.BOTTOMSLIDE,
+                                    title: 'Check Box',
+                                    desc: 'Please , Accept terms & condition to enjoy our products',
+                                    btnCancelOnPress: () {
+                                    },
+                                    btnOkOnPress: () {
+                                      
+                                    },
+                                  )..show();
+
+
+                                //   Get.snackbar('Check Box','Please , Accept terms & condition to enjoy our products' ,
+                                //   snackPosition: SnackPosition.BOTTOM,
+                                // backgroundColor: Colors.green,
+                                // colorText: Colors.white );
                                   
                                 }
 
